@@ -1,10 +1,16 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
 from .models import Choice, Question
 
+
+def showtime(request) -> HttpResponse:
+    thai_time = timezone.localtime()
+    message = f"<p>Thai Time: {thai_time}</p>"
+    return HttpResponse(message)
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -23,6 +29,14 @@ class DetailView(generic.DetailView):
         Excludes any questions that aren't published yet.
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
+
+    def dispatch(self, request, *args, **kwargs):
+        question = get_object_or_404(Question, pk=self.kwargs['pk'])
+        if not question.can_vote():
+            messages.error(request, "Voting is not ready for this poll")
+            return redirect(reverse('polls:index'))
+        else:
+            return super().get(request,*args,**kwargs)
 
 
 class ResultsView(generic.DetailView):
@@ -43,7 +57,5 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
