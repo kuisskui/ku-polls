@@ -1,8 +1,10 @@
 import datetime
+from venv import create
 
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
+
 from .models import Question
 
 
@@ -45,9 +47,37 @@ class QuestionModelTests(TestCase):
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
 
+    def test_is_published(self):
+        """Test is_published."""
+        future_question = create_question(
+            question_text="future_question", days=1)
+        self.assertIs(future_question.is_published(), False)
+
+        recent_question = create_question(
+            question_text="recent_question", days=-1)
+        self.assertIs(recent_question.is_published(), True)
+
+        recent_question = create_question(
+            question_text="recent_question", days=0)
+        self.assertIs(recent_question.is_published(), True)
+
+    def test_can_vote(self):
+        """Test can_vote"""
+        question = create_question(question_text="question", days=-1)
+        self.assertIs(question.can_vote(), True)
+
+        question = create_question(question_text="question", days=1)
+        self.assertIs(question.can_vote(), False)
+
+        question = create_question(question_text="question", days=0)
+        self.assertIs(question.can_vote(), True)
+
+        question = create_question(question_text="question", days=-1)
+        question.end_date = timezone.localtime() + timezone.timedelta(0.0000001)
+        self.assertIs(question.can_vote(), True)
+
 
 class QuestionIndexViewTests(TestCase):
-
     def test_no_questions(self):
         """
         If no questions exist, an appropriate message is displayed.
@@ -106,7 +136,6 @@ class QuestionIndexViewTests(TestCase):
 
 
 class QuestionDetailViewTests(TestCase):
-
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future
@@ -116,7 +145,7 @@ class QuestionDetailViewTests(TestCase):
             question_text='Future question.', days=5)
         url = reverse('polls:detail', args=(future_question.id,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
 
     def test_past_question(self):
         """
