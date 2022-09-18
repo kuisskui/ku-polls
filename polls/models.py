@@ -1,6 +1,4 @@
 import datetime
-from secrets import choice
-
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -56,8 +54,10 @@ class Vote(models.Model):
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
 
     def __str__(self):
+        """Show user's voted choice."""
         return f"Vote by {self.user.username}, choice : {self.choice.choice_text}"
-    
+
+
 def get_client_ip(request):
     """Get the visitor's IP address using request headers."""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
