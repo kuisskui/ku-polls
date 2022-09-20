@@ -3,11 +3,17 @@
 </div>
 
 <table>
-    <tr style=""><td>Choice</td><td>Vote</td></tr>
+    <tr>
+        <td>Choice</td>
+        <td>Vote</td>
+    </tr>
     {% for choice in question.choice_set.all %}
-        <tr><td>{{ choice.choice_text }}</td> <td style="text-align:center">{{ choice.votes }}</th></tr>
+    <tr>
+        <td>{{ choice.choice_text }}</td>
+        <td style="text-align:center">{{ choice.vote }}</th>
+    </tr>
     {% endfor %}
 </table>
 <div>
-    <a href={% url 'polls:index' %}>Back to List of Polls</a>
+    <a href="{% url 'polls:index' %}">Back to List of Polls</a>
 </div>

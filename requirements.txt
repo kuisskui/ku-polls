@@ -1,3 +1,2 @@
 django --version 4.1
 python --version 3.9
-python-decouple
