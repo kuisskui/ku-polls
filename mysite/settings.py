@@ -121,3 +121,4 @@ AUTHENTICATION_BACKENDS = [
 ]
 LOGIN_REDIRECT_URL = 'polls:index'
 LOGOUT_REDIRECT_URL = '/accounts/login'
+SIGNUP_REDIRECT_URL = '/accounts/login'
