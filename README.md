@@ -48,7 +48,7 @@ then run the server only one command
 # admin account
 |admin|Username|Password|
 |-----|--------|--------|
-|1|admid|1234|
+|1|admid|admin.1234|
 
 # user account
 |User |Username|Password|
