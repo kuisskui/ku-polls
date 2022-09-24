@@ -48,10 +48,10 @@ then run the server only one command
 # admin account
 |admin|Username|Password|
 |-----|--------|--------|
-|1|admid|1234|
+|1|admid|admin.1234|
 
 # user account
-|admin|Username|Password|
+|User |Username|Password|
 |-----|--------|--------|
 |1    |Pikachu |Pikachu.2002|
 |2    |Raichu  |Raichu.2002|

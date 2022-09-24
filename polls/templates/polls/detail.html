@@ -6,14 +6,13 @@
         </legend>
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% for choice in question.choice_set.all %}
-                {% if choice == latest_vote_choice %}
-                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" checked>
-                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                {% if choice.choice_text == existed_vote %}
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" checked>
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
                 {% else %}
-                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
                 {% endif %}
-        <br>
         {% endfor %}
     </fieldset>
     <input type="submit" value="Vote"><a href="{% url 'polls:index' %}">Back to List of Polls</a>

@@ -17,4 +17,5 @@ def signup(request):
             return redirect(reverse("polls:index"))
     else:
         form = UserCreationForm()
-    return render(request, 'registration/signup.html', {'form':form})
+    return render(request, 'registration/signup.html', {'form': form})
+    

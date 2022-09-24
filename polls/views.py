@@ -36,20 +36,28 @@ class DetailView(generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
 
     def dispatch(self, request, *args, **kwargs):
+        """Redirect user to index page when voting is not allow."""
         question = get_object_or_404(Question, pk=self.kwargs['pk'])
         if not question.can_vote():
-            messages.error(request, "Voting is not ready for this poll")
+            messages.error(request, "Voting is not allowed for this poll")
             return redirect(reverse('polls:index'))
         else:
-            user = request.user
-            other_vote = list(Vote.objects.filter(user=user).filter(choice__question=question))
-            if len(other_vote)>0:
-                latest_vote_choice = other_vote[-1].choice
-            else:
-                latest_vote_choice = None
-            
-            return render(request, self.template_name, {'question': question, 'latest_vote_choice': latest_vote_choice})
-            # return super().get(request, *args, **kwargs)
+            return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """Add more context to the template of this page."""
+        context = super().get_context_data(**kwargs)
+        question = Question.objects.get(pk=self.kwargs['pk'])
+        user = self.request.user
+        if user.is_authenticated:
+            try:
+                existed_vote = Vote.objects.get(
+                    user=user,
+                    choice__in=question.choice_set.all()).choice.choice_text
+                context['existed_vote'] = existed_vote
+            except Vote.DoesNotExist:
+                pass
+        return context
 
 
 class ResultsView(generic.DetailView):
