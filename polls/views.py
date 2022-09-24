@@ -52,7 +52,8 @@ class DetailView(generic.DetailView):
         if user.is_authenticated:
             try:
                 existed_vote = Vote.objects.get(
-                    user=user, choice__in=question.choice_set.all()).choice.choice_text
+                    user=user,
+                    choice__in=question.choice_set.all()).choice.choice_text
                 context['existed_vote'] = existed_vote
             except Vote.DoesNotExist:
                 pass
