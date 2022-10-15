@@ -1,3 +1,4 @@
+![status](https://github.com/kuisskui/ku-polls/actions/workflows/python-app.yml/badge.svg) [![codecov](https://codecov.io/gh/kuisskui/ku-polls/branch/main/graph/badge.svg?token=E6GBWVYPKV)](https://codecov.io/gh/kuisskui/ku-polls)
 ## Ku-Polls
 Web application for polls and surveys at Kasetsart University, written in Python using Django. It is based on the [Django Tutorial project][django-tutorial], with additional functionality.
 
